@@ -1,34 +1,21 @@
 package com.alishev.reflection;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
+import java.util.Scanner;
 
 public class TestReflection {
-    public static void main(String[] args) throws ClassNotFoundException {
-        Person person = new Person();
-        Class personClass1 = Person.class;
-        Class personClass2 = person.getClass();
-        Class personClass3 = Class.forName("com.alishev.reflection.Person");
+    public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InstantiationException, InvocationTargetException {
+        Scanner scanner = new Scanner(System.in);
+        Class classObject1 = Class.forName(scanner.next());
+        Class classObject2 = Class.forName(scanner.next());
+        String methodName = scanner.next();
+        Method m = classObject1.getMethod(methodName, classObject2);
+        Object object1 = classObject1.getDeclaredConstructor().newInstance();
+        Object object2 = classObject2.getConstructor(String.class).newInstance("String value");
 
-        Method[] methods = personClass1.getMethods();
-        for (Method method : methods) {
-            System.out.println(method.getName() + ", " + method.getReturnType() + ", " +
-                    Arrays.toString(method.getParameterTypes()));
-        }
-
-        Field[] fields = personClass1.getDeclaredFields();
-        for (Field field : fields) {
-            System.out.println(field.getName() + ", " + field.getType());
-        }
-
-        Annotation[] annotations = personClass1.getAnnotations();
-        for (Annotation annotation : annotations) {
-            if (annotation instanceof Author) {
-                System.out.println("Whoopy!");
-            }
-        }
+        m.invoke(object1, object2);
+        System.out.println(object1);
 
     }
 }
